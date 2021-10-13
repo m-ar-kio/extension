@@ -1,25 +1,41 @@
-import logo from '../logo.svg';
-import './Options.css';
+/* eslint-disable no-undef */
+import { useState, useEffect } from 'react'
+import Arweave from 'arweave/web'
+import { StyledSpinnerNext } from 'baseui/spinner'
+import Layout from './Layout'
+import './Options.css'
+import Login from './Login'
+import UserLayout from './UserLayout'
 
-function Options() {
+export default function Hello() {
+  const [address, setAddress] = useState('')
+  const [keyfile, setKeyfile] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  useEffect(() => {
+    if (address) {
+      return
+    }
+    document.title = 'm-ar-k'
+    chrome.storage.local.get(['keyfile'], function (result) {
+      if (result.keyfile) {
+        setKeyfile(result.keyfile)
+        const arweave = Arweave.init()
+        arweave.wallets
+          .jwkToAddress(JSON.parse(result.keyfile))
+          .then((address) => {
+            setAddress(address)
+            setIsLoading(false)
+          })
+      } else {
+        setIsLoading(false)
+      }
+    })
+  }, [address])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/options/Options.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Layout>
+      {isLoading && <StyledSpinnerNext />}
+      {!isLoading && !address && <Login />}
+      {address && <UserLayout address={address} keyfile={keyfile}></UserLayout>}
+    </Layout>
+  )
 }
-
-export default Options;

@@ -1,19 +1,30 @@
-// If your extension doesn't need a content script, just leave this file empty
+/* eslint-disable no-undef */
 
-// This is an example of a script that will run on every page. This can alter pages
-// Don't forget to change `matches` in manifest.json if you want to only change specific webpages
-printAllPageLinks();
+import { startTwitterIntegration } from './twitter'
+import { startMediumIntegration } from './medium'
+import { toast, createBookmark } from './helper'
 
-// This needs to be an export due to typescript implementation limitation of needing '--isolatedModules' tsconfig
-export function printAllPageLinks() {
-  const allLinks = Array.from(document.querySelectorAll('a')).map(
-    link => link.href
-  );
+chrome.runtime.onMessage.addListener((request, sender, response) => {
+  if (request.type === 'trigger') {
+    const result = startMediumIntegration()
+    if (result) {
+      createBookmark(result)
+    } else {
+      toast('error', 'Fail to load content')
+    }
+  }
+})
 
-  console.log('-'.repeat(30));
-  console.log(
-    `These are all ${allLinks.length} links on the current page that have been printed by the Sample Create React Extension`
-  );
-  console.log(allLinks);
-  console.log('-'.repeat(30));
+function main() {
+  console.log('# main start')
+  const href = window.location.href
+  if (/\/\/twitter.com/.test(href)) {
+    console.log('# twitter integration')
+    startTwitterIntegration()
+  } else if (/:\/\/\S*.medium.com/.test(href)) {
+    console.log('# medium integration')
+    startMediumIntegration()
+  }
 }
+
+main()
