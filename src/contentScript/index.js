@@ -7,7 +7,7 @@ import { toast, createBookmark } from './helper'
 chrome.runtime.onMessage.addListener((request, sender, response) => {
   if (request.type === 'trigger') {
     const result = startMediumIntegration()
-    if (result) {
+    if (result && result.content) {
       createBookmark(result)
     } else {
       toast('error', 'Fail to load content')

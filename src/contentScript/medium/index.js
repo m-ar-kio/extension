@@ -16,7 +16,9 @@ tdService.addRule('thumbnail', {
 tdService.addRule('related', {
   filter: function (node) {
     return (
-      (node.nodeName === 'DIV' && /related/.test(node.className)) ||
+      (node.nodeName === 'DIV' &&
+        (/related/.test(node.className) ||
+          /layout-article-sharing/.test(node.className))) ||
       (node.nodeName === 'SECTION' &&
         ['tag-list', 'see-alsos'].includes(node.dataset.component))
     )
@@ -55,7 +57,12 @@ export const startMediumIntegration = () => {
   if (article) {
     md = tdService.turndown(article.innerHTML)
   } else if (main) {
-    md = tdService.turndown(main.innerHTML)
+    const articleContent = main.getElementsByClassName('article-content')[0]
+    if (articleContent) {
+      md = tdService.turndown(articleContent.innerHTML)
+    } else {
+      md = tdService.turndown(main.innerHTML)
+    }
   }
 
   const regexLink = /\)(\n*)\)/g
