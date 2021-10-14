@@ -1,3 +1,4 @@
+import * as React from 'react'
 import urlParse from 'url-parse'
 import SimpleMarkdown from 'simple-markdown'
 import { initTwitterRules } from './rules/twitter'
@@ -21,6 +22,6 @@ export default function Mark({ mark }) {
 
   const _isTwitter = isTwitter(parsedURL.hostname)
   if (_isTwitter) {
-    return <Tweet tree={tree} parsedURL={parsedURL} reactOutput={reactOutput} />
+    return <Tweet tree={tree} reactOutput={reactOutput} mark={mark} />
   }
 }

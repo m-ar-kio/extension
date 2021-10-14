@@ -13,7 +13,17 @@ export default function MarksTab({ marks, isLoading }) {
     >
       {isLoading && <StyledSpinnerNext />}
       {marks.map((m) => {
-        return <Mark key={m.txId} mark={m.bm} />
+        return (
+          <Mark
+            key={m.txId}
+            mark={{
+              ...m.bm,
+              txId: m.txId,
+              sender: m.sender,
+              timestamp: m.timestamp,
+            }}
+          />
+        )
       })}
     </Block>
   )

@@ -53,14 +53,14 @@ export async function createBookmark(bm) {
     await arweave.transactions.sign(tx, wallet)
     let txId = tx.id
 
-    let jwkWallet = await arweave.wallets.jwkToAddress(wallet)
-    let walletBalance = await arweave.wallets.getBalance(jwkWallet)
-    let balanceInAr = await arweave.ar.winstonToAr(walletBalance)
+    // let jwkWallet = await arweave.wallets.jwkToAddress(wallet)
+    // let walletBalance = await arweave.wallets.getBalance(jwkWallet)
+    // let balanceInAr = await arweave.ar.winstonToAr(walletBalance)
 
-    if (balanceInAr < 0.10000001) {
-      toast('error', 'Error: Insufficient balance to send mail')
-      return
-    }
+    // if (balanceInAr < 0.10000001) {
+    //   toast('error', 'Insufficient balance to mark')
+    //   return
+    // }
 
     // PST Fee handling
     // let pstRecipient = await getPSTAllocation() // Get randomized token holder address
@@ -74,12 +74,8 @@ export async function createBookmark(bm) {
     // await arweave.transactions.sign(pstTx, wallet) // Sign transaction
     // await arweave.transactions.post(pstTx)
 
-    const txResponse = await arweave.transactions.post(tx)
-    console.log('###', txResponse)
-    arweave.transactions.getStatus(txId).then((res) => {
-      console.log('getStatus', res)
-    })
+    await arweave.transactions.post(tx)
 
-    toast('success', `Success: Transaction sent, id: ${txId}.`)
+    toast('success', `Transaction sent,\nid: ${txId}.`)
   })
 }
