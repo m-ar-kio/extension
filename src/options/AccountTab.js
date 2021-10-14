@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import { Block } from 'baseui/block'
 import { Button } from 'baseui/button'
+import { toaster } from 'baseui/toast'
 import { Display4, Paragraph3 } from 'baseui/typography'
 import { Copy } from 'react-feather'
 
@@ -38,6 +39,9 @@ export default function AccountTab({ address, marks }) {
             style={{ marginLeft: 6, cursor: 'pointer' }}
             onClick={() => {
               navigator.clipboard.writeText(address)
+              toaster.positive(<span>Address Copied</span>, {
+                autoHideDuration: 2000,
+              })
             }}
           />
         </Paragraph3>

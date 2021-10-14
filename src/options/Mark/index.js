@@ -4,6 +4,7 @@ import SimpleMarkdown from 'simple-markdown'
 import { initTwitterRules } from './rules/twitter'
 import { isTwitter } from './helper'
 import Tweet from './Tweet'
+import Article from './Article'
 
 export default function Mark({ mark }) {
   const rules = {
@@ -22,6 +23,21 @@ export default function Mark({ mark }) {
 
   const _isTwitter = isTwitter(parsedURL.hostname)
   if (_isTwitter) {
-    return <Tweet tree={tree} reactOutput={reactOutput} mark={mark} />
+    return (
+      <Tweet
+        tree={tree}
+        reactOutput={reactOutput}
+        mark={mark}
+        parsedURL={parsedURL}
+      />
+    )
   }
+  return (
+    <Article
+      tree={tree}
+      reactOutput={reactOutput}
+      mark={mark}
+      parsedURL={parsedURL}
+    />
+  )
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Navigation } from 'baseui/side-navigation'
 import { Block } from 'baseui/block'
 import AccountTab from './AccountTab'
