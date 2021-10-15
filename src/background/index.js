@@ -9,6 +9,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.method === 'get-keyfile') {
     chrome.storage.local.get(['keyfile'], function (result) {
       sendResponse({ keyfile: result.keyfile })
+      if (!result.keyfile) {
+        chrome.runtime.openOptionsPage(() => {})
+      }
     })
   }
   return true

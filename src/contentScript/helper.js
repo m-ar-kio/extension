@@ -2,8 +2,8 @@
 import Arweave from 'arweave/web'
 import Toastify from 'toastify-js'
 import 'toastify-js/src/toastify.css'
-
-const TARGET = 'FaZaQ48i0WXQyGXw68xuwuc6acUQoXYr8iLe8W-w234'
+import { getPSTAllocation } from './pst'
+import { MARK_OWNER } from './constants'
 
 export function toast(type, message) {
   Toastify({
@@ -40,7 +40,7 @@ export async function createBookmark(bm) {
 
     const tx = await arweave.createTransaction(
       {
-        target: TARGET,
+        target: MARK_OWNER,
         data: JSON.stringify(bm),
         quantity: tokens,
       },
@@ -53,26 +53,26 @@ export async function createBookmark(bm) {
     await arweave.transactions.sign(tx, wallet)
     let txId = tx.id
 
-    // let jwkWallet = await arweave.wallets.jwkToAddress(wallet)
-    // let walletBalance = await arweave.wallets.getBalance(jwkWallet)
-    // let balanceInAr = await arweave.ar.winstonToAr(walletBalance)
+    let jwkWallet = await arweave.wallets.jwkToAddress(wallet)
+    let walletBalance = await arweave.wallets.getBalance(jwkWallet)
+    let balanceInAr = await arweave.ar.winstonToAr(walletBalance)
 
-    // if (balanceInAr < 0.10000001) {
-    //   toast('error', 'Insufficient balance to mark')
-    //   return
-    // }
+    if (balanceInAr < 0.02000001) {
+      toast('error', 'Insufficient balance to mark')
+      return
+    }
 
     // PST Fee handling
-    // let pstRecipient = await getPSTAllocation() // Get randomized token holder address
-    // let pstTx = await arweave.createTransaction(
-    //   {
-    //     target: TARGET, // Fee recipient
-    //     quantity: arweave.ar.arToWinston(0.1), // 0.1 AR fee
-    //   },
-    //   wallet
-    // )
-    // await arweave.transactions.sign(pstTx, wallet) // Sign transaction
-    // await arweave.transactions.post(pstTx)
+    let pstRecipient = await getPSTAllocation()
+    const pstTx = await arweave.createTransaction(
+      {
+        target: pstRecipient,
+        quantity: arweave.ar.arToWinston(0.01), // 0.2 AR fee
+      },
+      wallet
+    )
+    await arweave.transactions.sign(pstTx, wallet)
+    await arweave.transactions.post(pstTx)
 
     await arweave.transactions.post(tx)
 
