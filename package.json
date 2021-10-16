@@ -15,6 +15,7 @@
     "react-dom": "^17.0.2",
     "react-feather": "^2.0.9",
     "simple-markdown": "^0.7.3",
+    "smartweave": "^0.4.45",
     "styletron-engine-atomic": "^1.4.8",
     "styletron-react": "^6.0.1",
     "toastify-js": "^1.11.2",
