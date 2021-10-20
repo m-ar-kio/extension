@@ -5,6 +5,13 @@ chrome.browserAction.onClicked.addListener(function (tab) {
   })
 })
 
+chrome.runtime.onInstalled.addListener(function (details) {
+  if (details.reason === 'install') {
+    chrome.runtime.openOptionsPage()
+  } else if (details.reason === 'update') {
+  }
+})
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.method === 'get-keyfile') {
     chrome.storage.local.get(['keyfile'], function (result) {
