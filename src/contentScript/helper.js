@@ -13,22 +13,23 @@ export function toast(type, message) {
     position: 'right',
     style: {
       background: {
-        success: 'green',
+        success: 'black',
         error: 'red',
-        normal: '#002FA7',
+        normal: '#999',
       }[type],
     },
     onClick: function () {}, // Callback after click
   }).showToast()
 }
 
-export async function createBookmark(bm) {
+export async function createBookmark(bm, tags = []) {
   chrome.runtime.sendMessage({ method: 'get-keyfile' }, async (response) => {
     if (!response.keyfile) {
       toast('error', 'Please login first')
+      chrome.runtime.openOptionsPage()
       return
     }
-    toast('normal', 'Saving')
+    toast('normal', 'Marking')
 
     const arweave = Arweave.init({
       host: 'arweave.net',
@@ -50,8 +51,11 @@ export async function createBookmark(bm) {
     tx.addTag('App-Version', '0.0.1')
     tx.addTag('Unix-Time', Math.round(new Date().getTime() / 1000))
 
+    tags.forEach((tag) => {
+      tx.addTag(tag, 'true')
+    })
+
     await arweave.transactions.sign(tx, wallet)
-    let txId = tx.id
 
     let jwkWallet = await arweave.wallets.jwkToAddress(wallet)
     let walletBalance = await arweave.wallets.getBalance(jwkWallet)
@@ -67,7 +71,7 @@ export async function createBookmark(bm) {
     const pstTx = await arweave.createTransaction(
       {
         target: pstRecipient,
-        quantity: arweave.ar.arToWinston(0.01), // 0.2 AR fee
+        quantity: arweave.ar.arToWinston(0.01),
       },
       wallet
     )
@@ -76,6 +80,6 @@ export async function createBookmark(bm) {
 
     await arweave.transactions.post(tx)
 
-    toast('success', `Transaction sent,\nid: ${txId}.`)
+    toast('success', `Transaction sent`)
   })
 }

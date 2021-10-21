@@ -2,13 +2,14 @@
 
 import { startTwitterIntegration } from './twitter'
 import { startMediumIntegration } from './medium'
-import { toast, createBookmark } from './helper'
+import { toast } from './helper'
+import { appendTagModal } from './tagmodal'
 
 chrome.runtime.onMessage.addListener((request, sender, response) => {
   if (request.type === 'trigger') {
     const result = startMediumIntegration()
     if (result && result.content) {
-      createBookmark(result)
+      appendTagModal(result)
     } else {
       toast('error', 'Fail to load content')
     }
@@ -16,13 +17,10 @@ chrome.runtime.onMessage.addListener((request, sender, response) => {
 })
 
 function main() {
-  console.log('# main start')
   const href = window.location.href
   if (/\/\/twitter.com/.test(href)) {
-    console.log('# twitter integration')
     startTwitterIntegration()
   } else if (/:\/\/\S*.medium.com/.test(href)) {
-    console.log('# medium integration')
     startMediumIntegration()
   }
 }

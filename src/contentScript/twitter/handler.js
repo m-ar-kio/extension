@@ -1,6 +1,6 @@
 import TurndownService from 'turndown'
 import { saveButtonElement } from './ui'
-import { createBookmark } from '../helper'
+import { appendTagModal } from '../tagmodal'
 
 const tdService = new TurndownService()
 tdService.remove('time')
@@ -132,7 +132,7 @@ function addPocketFunctionality(actionListContainer) {
       .replace(regexLink, ')\n)')
       .replace(/\n·\n/, '')
 
-    createBookmark({
+    appendTagModal({
       content: result,
       origin: permaLink,
     })

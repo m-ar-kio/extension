@@ -65,6 +65,13 @@ export const startMediumIntegration = () => {
     }
   }
 
+  if (!md) {
+    if (/mirror.xyz\/\S*/.test(origin)) {
+      const next = document.getElementById('__next')
+      md = tdService.turndown(next)
+    }
+  }
+
   const regexLink = /\)(\n*)\)/g
   const regexMid1 = /\[(\n*)(.*)(\n*)\]/g
   const regexMid2 = /\[(\n*)(.*)(\n*)(.*)(\n*)\]/g
