@@ -18,7 +18,8 @@ tdService.addRule('related', {
     return (
       (node.nodeName === 'DIV' &&
         (/related/.test(node.className) ||
-          /layout-article-sharing/.test(node.className))) ||
+          /layout-article-sharing/.test(node.className) ||
+          /share-dialog-title/.test(node.className))) ||
       (node.nodeName === 'SECTION' &&
         ['tag-list', 'see-alsos'].includes(node.dataset.component))
     )
@@ -31,7 +32,8 @@ tdService.addRule('hidden', {
   filter: function (node) {
     return (
       node.getAttribute('hidden') !== null ||
-      node.getAttribute('aria-haspopup') === 'true'
+      node.getAttribute('aria-haspopup') === 'true' ||
+      window.getComputedStyle(node).display === 'none'
     )
   },
   replacement: () => {

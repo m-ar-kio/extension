@@ -50,6 +50,7 @@ export async function createBookmark(bm, tags = []) {
     tx.addTag('App-Name', 'permamark')
     tx.addTag('App-Version', '0.0.1')
     tx.addTag('Unix-Time', Math.round(new Date().getTime() / 1000))
+    tx.addTag('origin', bm.origin)
 
     tags.forEach((tag) => {
       tx.addTag(tag, 'true')

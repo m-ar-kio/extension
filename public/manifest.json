@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "version": "0.0.3",
+  "version": "0.0.7",
   "short_name": "m-ar-k",
   "name": "m-ar-k",
   "description": "m-ar-k is a bookmark tool on arweave",
