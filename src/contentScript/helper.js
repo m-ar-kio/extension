@@ -62,22 +62,22 @@ export async function createBookmark(bm, tags = []) {
     let walletBalance = await arweave.wallets.getBalance(jwkWallet)
     let balanceInAr = await arweave.ar.winstonToAr(walletBalance)
 
-    if (balanceInAr < 0.02000001) {
+    if (balanceInAr < 0.01000001) {
       toast('error', 'Insufficient balance to mark')
       return
     }
 
     // PST Fee handling
-    let pstRecipient = await getPSTAllocation()
-    const pstTx = await arweave.createTransaction(
-      {
-        target: pstRecipient,
-        quantity: arweave.ar.arToWinston(0.01),
-      },
-      wallet
-    )
-    await arweave.transactions.sign(pstTx, wallet)
-    await arweave.transactions.post(pstTx)
+    // const pstRecipient = await getPSTAllocation()
+    // const pstTx = await arweave.createTransaction(
+    //   {
+    //     target: pstRecipient,
+    //     quantity: arweave.ar.arToWinston(0.01),
+    //   },
+    //   wallet
+    // )
+    // await arweave.transactions.sign(pstTx, wallet)
+    // await arweave.transactions.post(pstTx)
 
     await arweave.transactions.post(tx)
 
